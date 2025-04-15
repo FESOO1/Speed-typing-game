@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+:root {
+    --main-background: rgb(17,17,17);
+}
+
+html {
+    user-select: none;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Space Grotesk", sans-serif;
+}
+
+body {
+    background-color: var(--main-background);
+}
+
+/* MAIN */
+
+main {
+    --width: 700px;
+    --height: 250px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 40px;
+    padding-block: 80px;
+}
+
+/* MAIN TIME */
+
+.main-time {
+    color: white;
+    font-size: 2rem;
+}
+
+/* MAIN INPUT */
+
+.main-input {
+    width: var(--width);
+    height: 0;
+    background-color: rgb(20,20,20);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid white;
+    position: relative;
+    overflow: hidden;
+    transition: height 300ms;
+}
+
+.main-input-active {
+    width: var(--width);
+    height: var(--height);
+}
+
+.main-input-example {
+    padding: 10px 15px;
+    color: rgb(100,100,100);
+    font-size: 1.6rem;
+    line-height: 1.8;
+    /* transform: translateY(-48px); */
+}
+
+.main-input-itself {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    padding: 10px 15px;
+    font-size: 1.6rem;
+    line-height: 1.8;
+}
+
+.wrong-character {
+    color: red;
+}
+
+/* MAIN BUTTON */
+
+.main-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2rem;
+    border: 0;
+    background-color: rgb(30,30,30);
+    cursor: pointer;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.main-button-svg {
+    fill: white;
+}
+
+.main-button:hover {
+    background-color: rgb(40,40,40);
+}
+
+.main-button:active {
+    background-color: rgb(35,35,35);
+}
