@@ -33,6 +33,29 @@ main {
     padding-block: 80px;
 }
 
+/* MAIN RESULT */
+
+.main-result {
+    overflow: hidden;
+    background-color: rgb(30,30,30);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.main-result-active {
+    opacity: 1;
+}
+
+.main-result-text {
+    color: white;
+    padding-inline: 15px;
+    padding-block: 10px;
+}
+
 /* MAIN TIME */
 
 .main-time {
@@ -44,7 +67,8 @@ main {
 
 .main-input {
     width: var(--width);
-    height: 0;
+    /* height: 0; */
+    height: var(--height);
     background-color: rgb(20,20,20);
     border: 1px solid rgba(255,255,255,0.05);
     border-bottom: 1px solid white;
@@ -64,6 +88,7 @@ main {
     font-size: 1.6rem;
     line-height: 1.8;
     /* transform: translateY(-48px); */
+    transition: transform 300ms;
 }
 
 .main-input-itself {
@@ -74,6 +99,7 @@ main {
     padding: 10px 15px;
     font-size: 1.6rem;
     line-height: 1.8;
+    transition: transform 300ms;
 }
 
 .wrong-character {
@@ -106,4 +132,14 @@ main {
 
 .main-button:active {
     background-color: rgb(35,35,35);
+}
+
+.main-button:disabled {
+    background-color: rgb(25,25,25);
+    pointer-events: none;
+}
+
+.main-button:disabled .main-button-svg {
+    color: gray;
+    fill: gray;
 }

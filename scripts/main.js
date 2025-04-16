@@ -7,16 +7,24 @@ const timeCounterText = document.querySelector('.main-time');
 // PARAGRAPHS
 const exampleParagraph = document.querySelector('.main-input-example');
 const inputParagraph = document.querySelector('.main-input-itself');
+let exampleParagraphPusher = 0;
+let exampleParagraphIdentifier = 70;
 
 // START BUTTON
 const startButton = document.querySelector('#startButton');
+
+// RESULT
+const resultContainer = document.querySelector('.main-result');
+const wpmText = document.querySelector('#wpmText');
+const accuracyText = document.querySelector('#accuracyText');
 
 // SPEED OBJECT
 const speedObject = {
     input: {
         inputArr: [],
     },
-    exampleText: undefined,
+    exampleText: '',
+    exampleTextLength: 0,
     interval: {
         intervalSecondsCounter: 0,
         intervalMinutesCounter: 0,
@@ -51,6 +59,7 @@ async function gettingARandomParagraph() {
 
 function displayTheRandomParagraph(paragraph) {
     speedObject.exampleText = paragraph.paragraphs[Math.floor(Math.random() * paragraph.paragraphs.length)];
+    speedObject.exampleTextLength = speedObject.exampleText.length;
     exampleParagraph.textContent = speedObject.exampleText;
 };
 
@@ -76,14 +85,31 @@ function handlingTheTime() {
 
         };
         if (speedObject.interval.intervalMinutesCounter === 4 && speedObject.interval.intervalSecondsCounter === 59) {
-            clearInterval(speedObject.interval.intervalFunction);
+            clearTheInterval();
+            speedObject.interval.intervalMinutesCounter = 5;
             speedObject.interval.intervalSecondsCounter = 0;
-            speedObject.interval.intervalMinutesCounter = 0;
-            speedObject.interval.intervalFunction = undefined;
-            speedObject.interval.intervalState = false;
-            startButton.disabled = false;
+            const seconds = String(speedObject.interval.intervalSecondsCounter).padStart(2, 0);
+            const minutes = String(speedObject.interval.intervalMinutesCounter).padStart(2, 0);
+            timeCounterText.textContent = `${minutes}:${seconds}`;
+            calculateTheSpeed();
+            resettingTheProperties();
         };
     }, 1000);
+};
+
+function clearTheInterval() {
+    clearInterval(speedObject.interval.intervalFunction);
+};
+
+// RESETTING THE PROPERTIES
+
+function resettingTheProperties() {
+    speedObject.interval.intervalSecondsCounter = 0;
+    speedObject.interval.intervalMinutesCounter = 0;
+    speedObject.interval.intervalFunction = undefined;
+    speedObject.interval.intervalState = false;
+    speedObject.input.inputArr = [];
+    startButton.disabled = false;
 };
 
 // ENTERING AN INPUT
@@ -101,7 +127,20 @@ function enteringAnInput(value) {
 
     if (value !== lastCharacterExample) {
         inputParagraphChild.classList.add('wrong-character');
-        console.log(value, lastCharacterExample);
+    };
+
+    if (speedObject.input.inputArr.length === exampleParagraphIdentifier) {
+        exampleParagraphPusher -= 48;
+        exampleParagraph.style.transform = `translateY(${exampleParagraphPusher}px)`;
+        inputParagraph.style.transform = `translateY(${exampleParagraphPusher}px)`;
+        exampleParagraphIdentifier +=70;
+    };
+
+    // CHECKING IF THE INPUT'S LENGTH IS EQUAL TO THE LENGTH OF THE EXAMPLE TEXT'S LENGTH
+    if (speedObject.input.inputArr.length === speedObject.exampleTextLength) {
+        clearTheInterval();
+        calculateTheSpeed();
+        resettingTheProperties();
     };
 };
 
@@ -117,10 +156,36 @@ function removingACharacter() {
 // START THE GAME
 
 function startTheGame() {
+    resultContainer.classList.remove('main-result-active');
+    exampleParagraph.style.transform = 'none';
+    inputParagraph.style.transform = 'none';
+    inputParagraph.innerHTML = '';
+    exampleParagraph.textContent = '';
     gettingARandomParagraph();
     handlingTheTime();
     startButton.disabled = true;
     mainInput.classList.add('main-input-active');
+};
+
+// CALCULATE THE SPEED
+
+function calculateTheSpeed() {
+    let accuracyCounter = 0;
+    const time = Number(`${speedObject.interval.intervalMinutesCounter}.${speedObject.interval.intervalSecondsCounter}`);
+    const words = speedObject.exampleTextLength / 5;
+    const WPM = String(words / time);
+    const readyWPM = WPM.slice(0, WPM.indexOf('.', '') + 3);
+    for (let i = 0; i < speedObject.exampleTextLength; i++) {
+        if (speedObject.exampleText[i] !== speedObject.input.inputArr[i]) {
+            accuracyCounter++;
+        };
+    };
+    const accuracy = String(((speedObject.exampleTextLength - accuracyCounter) / speedObject.exampleTextLength) * 100);
+    const readyAccuracy = accuracy.slice(0, accuracy.indexOf('.', '') + 3);
+    
+    resultContainer.classList.add('main-result-active');
+    wpmText.textContent = `WPM: ${readyWPM}`;
+    accuracyText.textContent = `Accuracy: ${readyAccuracy}%`;
 };
 
 // INITIALIZING THE BUTTONS
